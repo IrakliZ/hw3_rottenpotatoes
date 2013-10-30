@@ -15,7 +15,7 @@ end
 Then /I should see "(.*)" before "(.*)"/ do |e1, e2|
   #  ensure that that e1 occurs before e2.
   #  page.body is the entire content of the page as a string.
-  flunk "Unimplemented"
+  assert page.body =~ /#{e1}.*#{e2}/m
 end
 
 # Make it easier to express checking or unchecking several boxes at once
@@ -29,8 +29,6 @@ When /I (un)?check the following ratings: (.*)/ do |uncheck, rating_list|
   rating_list.split(', ').each do |r|
     rating = "ratings_#{r}"
     if uncheck
-      puts ("UNCHECKING")
-      puts (r)
       uncheck(rating)
     else
       check(rating)
@@ -49,11 +47,14 @@ Then /I should (not )?see the movies rated: (.*)/ do |not_visible, rating_list|
 end
 
 Then /I should see (all|none) of the movies/ do |count|
-  rows = page.all('table#movies tr').count - 1
+  rows = page.all('#movies tr').size - 1
   if count == "all"
-    assert rows == Movie.count
+    puts (rows)
+    assert rows == Movie.all.size
   elsif count == "none"
     puts (rows)
     assert rows == 0
   end
 end
+
+
