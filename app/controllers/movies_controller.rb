@@ -7,6 +7,7 @@ class MoviesController < ApplicationController
   end
 
   #comment from server
+  #Test Comment
   def index
     sort = params[:sort] || session[:sort]
     case sort
